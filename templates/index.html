@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProPaint - Digital Art Studio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/toolbar.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+</head>
+
+  <body>
+    <!-- ============================= HEADER / TOPBAR ============================= -->
+    <header class="topbar">
+      <div class="logo-section">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" class="app-logo" alt="ProPaint Logo" />
+        <div class="app-title">ProPaint Pro</div>
+      </div>
+
+      <!-- 🛠️ Main Toolbar -->
+      <div class="main-toolbar">
+        <!-- Basic Tools -->
+        <div class="tool-group">
+          <button id="brushTool" class="tool-btn active" title="Brush (B)">🖌️</button>
+          <button id="eraserTool" class="tool-btn" title="Eraser (E)">🧽</button>
+          <button id="fillTool" class="tool-btn" title="Fill (F)">🪣</button>
+        </div>
+
+        <!-- Advanced Tools -->
+        <div class="tool-group">
+          <button id="textTool" class="tool-btn" title="Text (T)">🔤</button>
+          <button id="selectTool" class="tool-btn" title="Select (S)">🔲</button>
+        </div>
+
+        <!-- Shapes Dropdown -->
+        <div class="tool-group">
+          <div class="dropdown" id="shapeDropdownRoot">
+            <button id="shapeTool" class="tool-btn dropdown-toggle" title="Shapes (R)">⬛</button>
+            <div class="dropdown-menu" id="shapeDropdown">
+              <button class="shape-option" data-shape="rect">⬛ Rectangle</button>
+              <button class="shape-option" data-shape="circle">⚪ Circle</button>
+              <button class="shape-option" data-shape="ellipse">🌀 Ellipse</button>
+              <button class="shape-option" data-shape="triangle">🔺 Triangle</button>
+              <button class="shape-option" data-shape="line">📏 Line</button>
+              <button class="shape-option" data-shape="star">⭐ Star</button>
+              <button class="shape-option" data-shape="heart">❤️ Heart</button>
+              <button class="shape-option" data-shape="arrow">➡️ Arrow</button>
+              <button class="shape-option" data-shape="polygon">🔷 Polygon</button>
+            </div>
+          </div>
+          
+          <button id="sprayTool" class="tool-btn" title="Spray (P)">💨</button>
+        </div>
+
+        <!-- 🎨 Color & Size -->
+        <div class="tool-group color-size-group">
+          <label class="color-input" title="Primary Color">
+            <input id="colorPicker" type="color" value="#000000" />
+          </label>
+          <div class="size-control">
+            <span>Size:</span>
+            <input id="brushSize" type="range" min="1" max="50" value="5" />
+            <span id="sizeValue">5px</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🔧 Action Buttons -->
+      <div class="action-toolbar">
+        <button id="addLayerBtn" title="Add Layer">➕</button>
+        <button id="deleteLayerBtn" title="Delete Layer">🗑️</button>
+        <button id="undoBtn" title="Undo (Ctrl+Z)">↶</button>
+        <button id="redoBtn" title="Redo (Ctrl+Y)">↷</button>
+        <button id="clearBtn" title="Clear Canvas">🗑️</button>
+        <button id="saveBtn" title="Save (Ctrl+S)">💾</button>
+        <button id="themeToggle" title="Toggle Theme">🌙</button>
+      </div>
+    </header>
+
+    <!-- ============================= MAIN WORKSPACE ============================= -->
+    <main class="workspace">
+      <!-- 🎨 Left Sidebar - Tools & Properties -->
+      <aside class="sidebar left-sidebar">
+        <!-- 🛠️ Tools Panel -->
+        <div class="panel tools-panel">
+          <h3>🛠️ Tools</h3>
+          <div class="tool-presets">
+            <div class="tool-preset active" data-size="3">
+              <div class="preset-preview small"></div>
+              <span>Fine Brush</span>
+            </div>
+            <div class="tool-preset" data-size="8">
+              <div class="preset-preview medium"></div>
+              <span>Medium Brush</span>
+            </div>
+            <div class="tool-preset" data-size="15">
+              <div class="preset-preview large"></div>
+              <span>Large Brush</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🎨 Properties Panel -->
+        <div class="panel properties-panel">
+          <h3>⚙️ Properties</h3>
+          <div class="property-group">
+            <label>Opacity: <span id="opacityValue">100%</span></label>
+            <input id="opacitySlider" type="range" min="1" max="100" value="100">
+          </div>
+          <div class="property-group">
+            <label>Flow: <span id="flowValue">100%</span></label>
+            <input id="flowSlider" type="range" min="1" max="100" value="100">
+          </div>
+          
+          <!-- Shape Properties -->
+          <div id="shapeProperties" class="property-group">
+            <label><input id="shapeFill" type="checkbox" checked> Fill Shape</label>
+            <label><input id="shapeStroke" type="checkbox" checked> Stroke</label>
+            <label>Stroke Width: <input id="strokeWidth" type="range" min="1" max="10" value="2"></label>
+          </div>
+        </div>
+
+        <!-- 🎨 Recent Colors -->
+        <div class="panel recent-colors-panel">
+          <h3>🎨 Recent Colors</h3>
+          <div id="recentColors" class="color-swatches">
+            <div class="swatch-row">
+              <div class="color-swatch" style="background: #ff0000" data-color="#ff0000"></div>
+              <div class="color-swatch" style="background: #00ff00" data-color="#00ff00"></div>
+              <div class="color-swatch" style="background: #0000ff" data-color="#0000ff"></div>
+              <div class="color-swatch" style="background: #ffff00" data-color="#ffff00"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 🎨 CENTER CANVAS AREA -->
+      <section class="canvas-area">
+        <div class="canvas-container">
+          <!-- 🔳 Grid Overlay -->
+          <div id="gridOverlay" class="grid-overlay hidden"></div>
+          
+          <!-- 🖼️ Main Canvas Stack -->
+          <div class="canvas-stack" id="canvasStack">
+            <!-- Canvases will be dynamically created here -->
+          </div>
+          
+          <!-- 🎯 Selection Overlay -->
+          <div class="selection-overlay" id="selectionOverlay"></div>
+          
+          <!-- 📍 Coordinates -->
+          <div class="coordinates">
+            X: <span id="mouseX">0</span> Y: <span id="mouseY">0</span>
+          </div>
+
+          <!-- 🔍 Zoom Controls -->
+          <div class="zoom-controls">
+            <button id="zoomOutBtn" title="Zoom Out">−</button>
+            <span id="zoomLevel">100%</span>
+            <button id="zoomInBtn" title="Zoom In">+</button>
+            <button id="resetZoomBtn" title="Reset Zoom">⤢</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 🎨 Right Sidebar - Layers & Colors -->
+      <aside class="sidebar right-sidebar">
+        <!-- 👁️ Layers Panel -->
+        <div class="panel layers-panel">
+          <div class="panel-header">
+            <h3>👁️ Layers</h3>
+            <div class="layer-actions">
+              <button id="duplicateLayerBtn" title="Duplicate Layer">📋</button>
+            </div>
+          </div>
+          <div id="layerList" class="layer-list">
+            <!-- Layers will be dynamically added here -->
+          </div>
+        </div>
+
+        <!-- 🎨 Color Palettes -->
+        <div class="panel colors-panel">
+          <h3>🎨 Colors</h3>
+          
+          <!-- Color Swatches -->
+          <div class="color-swatches">
+            <div class="swatch-row">
+              <div class="color-swatch active" style="background: #ff0000" data-color="#ff0000"></div>
+              <div class="color-swatch" style="background: #00ff00" data-color="#00ff00"></div>
+              <div class="color-swatch" style="background: #0000ff" data-color="#0000ff"></div>
+              <div class="color-swatch" style="background: #ffff00" data-color="#ffff00"></div>
+            </div>
+            <div class="swatch-row">
+              <div class="color-swatch" style="background: #ff00ff" data-color="#ff00ff"></div>
+              <div class="color-swatch" style="background: #00ffff" data-color="#00ffff"></div>
+              <div class="color-swatch" style="background: #000000" data-color="#000000"></div>
+              <div class="color-swatch" style="background: #ffffff" data-color="#ffffff"></div>
+            </div>
+          </div>
+
+          <!-- Secondary Color Picker -->
+          <div class="property-group">
+            <label>Secondary Color:</label>
+            <input id="secondaryColorPicker" type="color" value="#ffffff" />
+          </div>
+        </div>
+
+        <!-- ✨ Transform Tools -->
+        <div class="panel transform-panel">
+          <h3>✨ Transform</h3>
+          <div class="property-group">
+            <label>Rotation: <span id="rotationValue">0°</span></label>
+            <input id="rotateSlider" type="range" min="0" max="360" value="0">
+          </div>
+          <div class="property-group">
+            <label>Scale: <span id="scaleValue">100%</span></label>
+            <input id="scaleSlider" type="range" min="50" max="200" value="100">
+          </div>
+          <div class="transform-actions">
+            <button id="flipHorizontal" title="Flip Horizontal">↔️ Flip H</button>
+            <button id="flipVertical" title="Flip Vertical">↕️ Flip V</button>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- ============================= FOOTER ============================= -->
+    <footer class="status-bar">
+      <div class="status-left">
+        <span id="status" class="status">Ready to draw</span>
+      </div>
+      <div class="status-center">
+        <div class="help-text">
+          <b>Brush (B)</b> • <b>Eraser (E)</b> • <b>Fill (F)</b> • <b>Text (T)</b> • <b>Save (Ctrl+S)</b>
+        </div>
+      </div>
+      <div class="status-right">
+        <div class="document-info">
+          Canvas: <span id="canvasSize">800×600</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- 📝 Text Input Modal -->
+    <div id="textModal" class="modal hidden">
+      <div class="modal-content">
+        <h3>Enter Text</h3>
+        <div class="text-properties">
+          <select id="fontSelect">
+            <option value="Arial">Arial</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Courier New">Courier New</option>
+          </select>
+          <input id="fontSize" type="range" min="12" max="72" value="24">
+          <span id="fontSizeValue">24px</span>
+          <div class="text-style-buttons">
+            <button id="boldBtn" class="tool-btn" title="Bold">B</button>
+            <button id="italicBtn" class="tool-btn" title="Italic">I</button>
+            <button id="underlineBtn" class="tool-btn" title="Underline">U</button>
+          </div>
+        </div>
+        <textarea id="textInput" placeholder="Type your text here..."></textarea>
+        <div class="modal-actions">
+          <button id="confirmText" class="btn-primary">Insert Text</button>
+          <button id="cancelText" class="btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================= SCRIPTS ============================= -->
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tools.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ui.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced_features.js') }}"></script>
+  </body>
+</html>

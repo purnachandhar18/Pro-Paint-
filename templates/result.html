@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saved Drawings — ProPaint</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    .gallery { display:flex; flex-wrap:wrap; gap:10px; padding:20px; justify-content:center; }
+    .gallery img { border-radius:8px; max-width:300px; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition:0.3s; }
+    .gallery img:hover { transform:scale(1.05); }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="app-title">Saved Drawings</div>
+    <a href="{{ url_for('index') }}">
+      <button>← Back</button>
+    </a>
+  </header>
+  <main class="main">
+    <div class="gallery">
+      {% for file in files %}
+        <img src="{{ url_for('static', filename='images/saved/' + file) }}" alt="Saved Drawing">
+      {% else %}
+        <p style="text-align:center;">No saved drawings yet.</p>
+      {% endfor %}
+    </div>
+  </main>
+</body>
+</html>

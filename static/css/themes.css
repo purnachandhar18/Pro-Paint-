@@ -1,0 +1,46 @@
+/* Light Theme (default) */
+:root {
+  --bg-color: #f5f7fb;
+  --toolbar-bg: #ffffff;
+  --text-color: #222;
+}
+
+/* Dark Theme */
+body.dark {
+  --bg-color: #1e1e1e;
+  --toolbar-bg: #2a2a2a;
+  --text-color: #eee;
+  background: var(--bg-color);
+}
+
+body.dark .topbar {
+  background: var(--toolbar-bg);
+  color: var(--text-color);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+body.dark .controls button {
+  background: #333;
+  border-color: #444;
+  color: #fff;
+}
+
+/* Enhanced dark theme compatibility */
+body.dark .tool-group {
+  background: var(--toolbar-bg);
+  border-color: #444;
+}
+
+body.dark .dropdown-menu {
+  background: var(--toolbar-bg);
+  border-color: #444;
+}
+
+body.dark .shape-option {
+  color: var(--text-color);
+}
+
+body.dark .shape-option:hover {
+  background: var(--accent-solid);
+  color: white;
+}

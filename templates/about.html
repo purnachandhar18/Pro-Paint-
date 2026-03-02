@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — ProPaint</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #ffffff 100%);
+      color: #333;
+      margin: 0;
+    }
+
+    .about-content {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #2a2aff;
+      text-align: center;
+    }
+
+    .team-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .team-list li {
+      background: #f4f5ff;
+      border-radius: 8px;
+      padding: 10px 15px;
+      margin: 8px 0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
+    }
+
+    .team-list li span {
+      color: #333;
+    }
+
+    .back-btn {
+      background: #5a5eff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .back-btn:hover {
+      background: #3e3ee6;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar" style="display:flex;justify-content:space-between;align-items:center;padding:10px 20px;">
+    <div class="app-title">About ProPaint</div>
+    <a href="{{ url_for('index') }}" style="text-decoration:none;">
+      <button class="back-btn">← Back to Paint</button>
+    </a>
+  </header>
+
+  <main class="main about">
+    <section class="about-content">
+      <h1>🎨 ProPaint — Python 3D Paint Application</h1>
+      <p><strong>Course:</strong> Python Laboratory Project</p>
+      <p><strong>Project Title:</strong> Paint Application</p>
+      <p><strong>Department:</strong> Computer Science and Engineering</p>
+
+      <h3>👩‍💻 Team Members</h3>
+      <ul class="team-list">
+        <li><span>24H51A05HX</span> <span>DHARJI SHRAVYA</span></li>
+        <li><span>24H51A05HY</span> <span>DUNNA AADHYA</span></li>
+        <li><span>24H51A05J3</span> <span>GOLLA BHARGAVA TEJA</span></li>
+      </ul>
+
+      <h3>🧠 Description</h3>
+      <p>
+        <strong>ProPaint</strong> is a professional web-based paint application
+        built using <strong>Python (Flask)</strong> and modern web technologies.
+        It combines a 2D drawing canvas with a 3D interactive background,
+        allowing users to create, edit, and save drawings directly in the browser.
+      </p>
+
+      <h3>✨ Features</h3>
+      <ul>
+        <li>3D interactive background using Three.js</li>
+        <li>Brush, eraser, fill, and shape tools</li>
+        <li>Multi-layer drawing system with undo/redo</li>
+        <li>Save drawings locally using Flask backend</li>
+        <li>Modern UI with responsive design</li>
+      </ul>
+
+      <footer>© 2025 ProPaint Team — All Rights Reserved.</footer>
+    </section>
+  </main>
+</body>
+</html>

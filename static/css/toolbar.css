@@ -1,0 +1,89 @@
+/* toolbar.css */
+.topbar button {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background: linear-gradient(180deg, #ffffff, #e7edff);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+.topbar button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, #f3f7ff, #dde6ff);
+}
+.controls button img {
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+}
+.controls button img {
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  vertical-align: middle;
+}
+.controls button {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.controls button:hover {
+  transform: translateY(-2px);
+}
+
+/* Dropdown Base */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  position: relative;
+  z-index: 2;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background: var(--bg-light, #fff);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-top: 8px;
+  padding: 6px;
+  z-index: 10;
+}
+
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-menu button:hover {
+  background: #f2f2f2;
+  border-radius: 4px;
+}
+
+/* Show dropdown when open */
+.dropdown.open .dropdown-menu {
+  display: block;
+}
+
+/* Active tool styling */
+.tool-btn.active {
+  background: #e2e6ff;
+  border-color: #5a5eff;
+  color: #2a2aff;
+}
